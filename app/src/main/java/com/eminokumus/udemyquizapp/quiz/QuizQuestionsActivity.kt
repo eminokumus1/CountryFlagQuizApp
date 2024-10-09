@@ -1,7 +1,8 @@
-package com.eminokumus.udemyquizapp
+package com.eminokumus.udemyquizapp.quiz
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.eminokumus.udemyquizapp.Constants
 import com.eminokumus.udemyquizapp.databinding.ActivityQuizQuestionsBinding
 
 class QuizQuestionsActivity : AppCompatActivity() {

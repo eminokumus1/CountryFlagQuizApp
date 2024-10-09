@@ -1,4 +1,4 @@
-package com.eminokumus.udemyquizapp
+package com.eminokumus.udemyquizapp.vo
 
 data class Question(
     val id: Int,

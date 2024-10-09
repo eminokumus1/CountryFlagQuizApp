@@ -13,7 +13,7 @@
         android:theme="@style/Theme.UdemyQuizApp"
         tools:targetApi="31">
         <activity
-            android:name=".QuizQuestionsActivity"
+            android:name=".quiz.QuizQuestionsActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

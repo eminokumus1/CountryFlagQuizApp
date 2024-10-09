@@ -1,5 +1,7 @@
 package com.eminokumus.udemyquizapp
 
+import com.eminokumus.udemyquizapp.vo.Question
+
 object Constants {
 
     fun getQuestions(): ArrayList<Question>{

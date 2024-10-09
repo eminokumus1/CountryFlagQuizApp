@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.eminokumus.udemyquizapp.databinding.ActivityMainBinding
+import com.eminokumus.udemyquizapp.quiz.QuizQuestionsActivity
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
