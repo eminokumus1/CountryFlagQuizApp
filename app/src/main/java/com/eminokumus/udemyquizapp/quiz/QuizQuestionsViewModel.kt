@@ -15,6 +15,10 @@ class QuizQuestionsViewModel: ViewModel() {
 
     private var currentPosition = 1
 
+    private var selectedAnswer = 0
+
+    private var isAnswerCorrect = false
+
     init {
         _currentQuestion.value = questionList[0]
     }
@@ -26,6 +30,22 @@ class QuizQuestionsViewModel: ViewModel() {
 
     fun getCurrentPosition(): Int{
         return currentPosition
+    }
+
+    fun selectAnswer(answer: Int){
+        selectedAnswer = answer
+    }
+
+    fun getSelectedAnswer(): Int{
+        return selectedAnswer
+    }
+
+    fun checkAnswer(){
+        if (selectedAnswer == currentQuestion.value?.correctAnswer){
+            isAnswerCorrect = true
+        }else{
+            isAnswerCorrect = false
+        }
     }
 
 }
