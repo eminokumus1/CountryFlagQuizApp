@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".quiz.QuizQuestionsActivity">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -117,6 +118,28 @@
             android:layout_margin="10dp"
             android:text="@string/submit"
             android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+
+        <Button
+            android:id="@+id/nextQuestionButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="@string/go_to_next_question"
+            android:textColor="@color/white"
+            android:visibility="gone"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+
+        <Button
+            android:id="@+id/finishButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="@string/finish"
+            android:textColor="@color/white"
+            android:visibility="gone"
             android:textSize="18sp"
             android:textStyle="bold"/>
 

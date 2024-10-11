@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.TextView
 import androidx.activity.viewModels
 import com.eminokumus.udemyquizapp.R
@@ -15,6 +16,7 @@ class QuizQuestionsActivity : AppCompatActivity() {
     private val viewModel: QuizQuestionsViewModel by viewModels()
 
     private val optionViews = arrayListOf<TextView>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,8 +30,7 @@ class QuizQuestionsActivity : AppCompatActivity() {
             setUIComponents(newQuestion)
         }
 
-        setSubmitButtonOnClickListener()
-        setOptionsOnClickListener()
+        setOnClickListeners()
 
 
     }
@@ -47,10 +48,30 @@ class QuizQuestionsActivity : AppCompatActivity() {
         }
     }
 
+    private fun setOnClickListeners(){
+        setSubmitButtonOnClickListener()
+        setNextQuestionButtonOnClickListener()
+        setOptionsOnClickListener()
+    }
+
     private fun setSubmitButtonOnClickListener() {
         binding.submitButton.setOnClickListener {
+            showCorrectAndWrongAnswer()
+            if (viewModel.getCurrentPosition() == viewModel.getQuestionList().size){
+                binding.finishButton.visibility = View.VISIBLE
+            }else{
+                binding.nextQuestionButton.visibility = View.VISIBLE
+            }
+            it.visibility = View.GONE
+        }
+    }
+
+    private fun setNextQuestionButtonOnClickListener(){
+        binding.nextQuestionButton.setOnClickListener{
             viewModel.updateQuestion()
             resetOptionsPropertiesToDefault(null)
+            binding.submitButton.visibility = View.VISIBLE
+            it.visibility = View.GONE
         }
     }
 
@@ -87,8 +108,8 @@ class QuizQuestionsActivity : AppCompatActivity() {
     }
 
     private fun resetOptionsPropertiesToDefault(viewToExclude: TextView?) {
-        for (optionView in optionViews){
-            if (optionView == viewToExclude){
+        for (optionView in optionViews) {
+            if (optionView == viewToExclude) {
                 continue
             }
             optionView.setBackgroundResource(R.drawable.default_option_border_bg)
@@ -99,10 +120,49 @@ class QuizQuestionsActivity : AppCompatActivity() {
         }
     }
 
-    private fun addOptionsToList(){
+    private fun addOptionsToList() {
         optionViews.add(binding.firstOptionText)
         optionViews.add(binding.secondOptionText)
         optionViews.add(binding.thirdOptionText)
         optionViews.add(binding.fourthOptionText)
+    }
+
+    private fun setCorrectBackground(view: TextView) {
+        view.setBackgroundResource(R.drawable.correct_option_border_bg)
+    }
+
+    private fun setWrongBackground(view: TextView) {
+        view.setBackgroundResource(R.drawable.wrong_option_border_bg)
+    }
+
+    private fun showCorrectAndWrongAnswer() {
+        val selectedAnswerView = findSelectedAnswerView()
+        val correctAnswerView = findCorrectAnswerView()
+        if (viewModel.isAnswerCorrect()) {
+            setCorrectBackground(selectedAnswerView)
+        } else {
+            setCorrectBackground(correctAnswerView)
+            setWrongBackground(selectedAnswerView)
+        }
+    }
+
+    private fun findCorrectAnswerView(): TextView {
+        return when (viewModel.currentQuestion.value?.correctAnswer) {
+            1 -> binding.firstOptionText
+            2 -> binding.secondOptionText
+            3 -> binding.thirdOptionText
+            4 -> binding.fourthOptionText
+            else -> throw Exception("Unknown answer")
+        }
+    }
+
+    private fun findSelectedAnswerView(): TextView {
+        return when (viewModel.getSelectedAnswer()) {
+            1 -> binding.firstOptionText
+            2 -> binding.secondOptionText
+            3 -> binding.thirdOptionText
+            4 -> binding.fourthOptionText
+            else -> throw Exception("Unknown answer")
+        }
     }
 }
