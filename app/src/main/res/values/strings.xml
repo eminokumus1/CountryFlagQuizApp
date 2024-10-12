@@ -9,4 +9,7 @@
     <string name="quiz_image">Quiz Image</string>
     <string name="go_to_next_question">GO TO NEXT QUESTION</string>
     <string name="finish">FINISH</string>
+    <string name="trophy_image">Trophy Image</string>
+    <string name="result">Result</string>
+    <string name="hey_congratulations">Hey, Congratulations!</string>
 </resources>

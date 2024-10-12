@@ -1,5 +1,6 @@
 package com.eminokumus.udemyquizapp.quiz
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
@@ -7,8 +8,10 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.activity.viewModels
+import com.eminokumus.udemyquizapp.Constants
 import com.eminokumus.udemyquizapp.R
 import com.eminokumus.udemyquizapp.databinding.ActivityQuizQuestionsBinding
+import com.eminokumus.udemyquizapp.result.ResultActivity
 import com.eminokumus.udemyquizapp.vo.Question
 
 class QuizQuestionsActivity : AppCompatActivity() {
@@ -17,11 +20,15 @@ class QuizQuestionsActivity : AppCompatActivity() {
 
     private val optionViews = arrayListOf<TextView>()
 
+    private var username: String? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityQuizQuestionsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        username = intent.getStringExtra(Constants.USER_NAME)
 
         addOptionsToList()
 
@@ -48,30 +55,43 @@ class QuizQuestionsActivity : AppCompatActivity() {
         }
     }
 
-    private fun setOnClickListeners(){
+    private fun setOnClickListeners() {
         setSubmitButtonOnClickListener()
         setNextQuestionButtonOnClickListener()
         setOptionsOnClickListener()
+        setFinishButtonOnClickListener()
     }
 
     private fun setSubmitButtonOnClickListener() {
         binding.submitButton.setOnClickListener {
             showCorrectAndWrongAnswer()
-            if (viewModel.getCurrentPosition() == viewModel.getQuestionList().size){
+            if (viewModel.getCurrentPosition() == viewModel.getQuestionList().size) {
                 binding.finishButton.visibility = View.VISIBLE
-            }else{
+            } else {
                 binding.nextQuestionButton.visibility = View.VISIBLE
             }
             it.visibility = View.GONE
+            viewModel.selectAnswer(0)
         }
     }
 
-    private fun setNextQuestionButtonOnClickListener(){
-        binding.nextQuestionButton.setOnClickListener{
+    private fun setNextQuestionButtonOnClickListener() {
+        binding.nextQuestionButton.setOnClickListener {
             viewModel.updateQuestion()
             resetOptionsPropertiesToDefault(null)
             binding.submitButton.visibility = View.VISIBLE
             it.visibility = View.GONE
+        }
+    }
+
+    private fun setFinishButtonOnClickListener() {
+        binding.finishButton.setOnClickListener {
+            val intent = Intent(this, ResultActivity::class.java)
+            intent.putExtra(Constants.USER_NAME, username)
+            intent.putExtra(Constants.SCORE, viewModel.getScore())
+            intent.putExtra(Constants.TOTAL_QUESTIONS, viewModel.getQuestionList().size)
+            startActivity(intent)
+            finish()
         }
     }
 
@@ -127,12 +147,12 @@ class QuizQuestionsActivity : AppCompatActivity() {
         optionViews.add(binding.fourthOptionText)
     }
 
-    private fun setCorrectBackground(view: TextView) {
-        view.setBackgroundResource(R.drawable.correct_option_border_bg)
+    private fun setCorrectBackground(view: TextView?) {
+        view?.setBackgroundResource(R.drawable.correct_option_border_bg)
     }
 
-    private fun setWrongBackground(view: TextView) {
-        view.setBackgroundResource(R.drawable.wrong_option_border_bg)
+    private fun setWrongBackground(view: TextView?) {
+        view?.setBackgroundResource(R.drawable.wrong_option_border_bg)
     }
 
     private fun showCorrectAndWrongAnswer() {
@@ -140,6 +160,7 @@ class QuizQuestionsActivity : AppCompatActivity() {
         val correctAnswerView = findCorrectAnswerView()
         if (viewModel.isAnswerCorrect()) {
             setCorrectBackground(selectedAnswerView)
+            viewModel.increaseScore()
         } else {
             setCorrectBackground(correctAnswerView)
             setWrongBackground(selectedAnswerView)
@@ -156,13 +177,13 @@ class QuizQuestionsActivity : AppCompatActivity() {
         }
     }
 
-    private fun findSelectedAnswerView(): TextView {
+    private fun findSelectedAnswerView(): TextView? {
         return when (viewModel.getSelectedAnswer()) {
             1 -> binding.firstOptionText
             2 -> binding.secondOptionText
             3 -> binding.thirdOptionText
             4 -> binding.fourthOptionText
-            else -> throw Exception("Unknown answer")
+            else -> null
         }
     }
 }

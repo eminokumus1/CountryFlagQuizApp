@@ -17,6 +17,8 @@ class QuizQuestionsViewModel: ViewModel() {
 
     private var selectedAnswer = 0
 
+    private var score = 0
+
 
     init {
         _currentQuestion.value = questionList[0]
@@ -49,6 +51,14 @@ class QuizQuestionsViewModel: ViewModel() {
         }else{
             false
         }
+    }
+
+    fun getScore(): Int{
+        return score
+    }
+
+    fun increaseScore(){
+        score++
     }
 
 }
